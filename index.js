@@ -11,7 +11,7 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
-app.use("/", async (req, res) => {
+app.get("/", async (req, res) => {
   res.send("Hello World!");
 });
 
