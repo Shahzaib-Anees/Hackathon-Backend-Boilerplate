@@ -8,6 +8,15 @@ const generateAccessToken = (user) => {
   });
 };
 
+const fakeUSerName = () => {
+  const username = ["user"];
+  for (let i = 0; i < 10; i++) {
+    const randomNumber = Math.floor(Math.random() * 1000);
+    username.push(`user${randomNumber}`);
+  }
+  return username.join("");
+};
+
 const generateRefreshToken = (user) => {
   return jwt.sign({ email: user.email }, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: "7d",
@@ -23,4 +32,9 @@ const decryptPassword = async (enteredPassword, hashedPassword) => {
   }
 };
 
-export { generateAccessToken, generateRefreshToken, decryptPassword };
+export {
+  generateAccessToken,
+  generateRefreshToken,
+  decryptPassword,
+  fakeUSerName,
+};

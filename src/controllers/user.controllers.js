@@ -2,11 +2,12 @@ import {
   generateAccessToken,
   generateRefreshToken,
   decryptPassword,
+  fakeUSerName,
 } from "../methods/authenticationMethods.js";
 import { userModel } from "../models/user.models.js";
 
 const registerUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
   if (!email) return res.status(400).json({ message: "Email is required" });
   if (!password)
     return res.status(400).json({ message: "Password is required" });
@@ -16,6 +17,7 @@ const registerUser = async (req, res) => {
     return res.status(400).json({ message: "Email already exists" });
 
   const newUser = await userModel.create({
+    name: name ? name : fakeUSerName(),
     email,
     password,
   });
