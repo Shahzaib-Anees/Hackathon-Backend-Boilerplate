@@ -24,8 +24,10 @@ const registerUser = async (req, res) => {
   const accessToken = generateAccessToken(newUser);
   const refreshToken = generateRefreshToken(newUser);
   res.cookie("refreshToken", refreshToken, {
-    http: true,
-    secure: false,
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    path: "/",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
   res.status(201).json({
