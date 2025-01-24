@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 import bcrypt from "bcrypt";
 const generateAccessToken = (user) => {
   return jwt.sign({ email: user.email }, process.env.ACCESS_TOKEN_SECRET, {
