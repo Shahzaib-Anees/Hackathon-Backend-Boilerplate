@@ -3,6 +3,7 @@ import {
   generateRefreshToken,
   decryptPassword,
 } from "../methods/authenticationMethods.js";
+import { uploadImageToCloudinary } from "../methods/cloudinary.methods.js";
 import { sentEmail } from "../methods/nodemailer.methods.js";
 import { userModel } from "../models/user.models.js";
 
@@ -80,8 +81,23 @@ const loginUser = async (req, res) => {
   }
 };
 
+const uploadImage = async (req, res) => {
+  const image = req.file.path || req.body.image;
+  if (!image) {
+    return res.status(400).json({ message: "Image is required" });
+  }
+  try {
+    const link = uploadImageToCloudinary(image);
+    return res
+      .status(200)
+      .json({ message: "Image uploaded successfully", link });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
 const logOutUser = async (req, res) => {
   res.clearCookie("refreshToken");
   res.status(200).json({ message: "User logged out successfully" });
 };
-export { registerUser, loginUser, logOutUser };
+export { registerUser, loginUser, logOutUser, uploadImage };
