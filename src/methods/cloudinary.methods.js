@@ -1,6 +1,7 @@
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
 dotenv.config();
+import fs from "fs";
 
 // Cloudinary Configs
 cloudinary.config({
@@ -18,7 +19,6 @@ const uploadImageToCloudinary = async (localFile) => {
     fs.unlink(localFile, (err) => {
       if (err) console.log("Error deleting local file:", err);
     });
-
     return response.url;
   } catch (error) {
     console.log(error);

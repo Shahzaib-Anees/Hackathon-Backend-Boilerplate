@@ -1,3 +1,5 @@
+import { transporter } from "../configs/nodemailer.configs.js";
+
 const sentEmail = async (receiverEmail, subject, message) => {
   if (!receiverEmail) throw new Error("Receiver email is required");
   if (!message) throw new Error("Message is required");

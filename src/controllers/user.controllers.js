@@ -9,6 +9,8 @@ import { userModel } from "../models/user.models.js";
 
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
+  console.log(name, email, password);
+
   if (!name) return res.status(400).json({ message: "Name is required" });
   if (!email) return res.status(400).json({ message: "Email is required" });
   if (!password)
@@ -37,7 +39,8 @@ const registerUser = async (req, res) => {
     const message = `<h1>Hello ${name}</h1>
     <h3>Welcome to our ecommerce app !</h3>
     <p>Thanks for registering to our platform</p>`;
-    const email = sentEmail(email, subject, message);
+
+    await sentEmail(email, subject, message);
 
     res.status(201).json({
       message: "User registered successfully",
@@ -87,7 +90,7 @@ const uploadImage = async (req, res) => {
     return res.status(400).json({ message: "Image is required" });
   }
   try {
-    const link = uploadImageToCloudinary(image);
+    const link = await uploadImageToCloudinary(image);
     return res
       .status(200)
       .json({ message: "Image uploaded successfully", link });
