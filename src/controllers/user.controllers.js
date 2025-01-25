@@ -9,7 +9,6 @@ import { userModel } from "../models/user.models.js";
 
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
-  console.log(name, email, password);
 
   if (!name) return res.status(400).json({ message: "Name is required" });
   if (!email) return res.status(400).json({ message: "Email is required" });
