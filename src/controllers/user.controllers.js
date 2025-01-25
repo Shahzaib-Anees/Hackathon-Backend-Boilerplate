@@ -2,12 +2,13 @@ import {
   generateAccessToken,
   generateRefreshToken,
   decryptPassword,
-  fakeUSerName,
 } from "../methods/authenticationMethods.js";
+import { sentEmail } from "../methods/nodemailer.methods.js";
 import { userModel } from "../models/user.models.js";
 
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
+  if (!name) return res.status(400).json({ message: "Name is required" });
   if (!email) return res.status(400).json({ message: "Email is required" });
   if (!password)
     return res.status(400).json({ message: "Password is required" });
@@ -15,26 +16,36 @@ const registerUser = async (req, res) => {
   const ifEmailFound = await userModel.findOne({ email });
   if (ifEmailFound)
     return res.status(400).json({ message: "Email already exists" });
+  try {
+    const newUser = await userModel.create({
+      name: name,
+      email,
+      password,
+    });
+    const accessToken = generateAccessToken(newUser);
+    const refreshToken = generateRefreshToken(newUser);
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
-  const newUser = await userModel.create({
-    name: name ? name : fakeUSerName(),
-    email,
-    password,
-  });
-  const accessToken = generateAccessToken(newUser);
-  const refreshToken = generateRefreshToken(newUser);
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-    path: "/",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
-  res.status(201).json({
-    message: "User registered successfully",
-    data: newUser,
-    ACCESS_TOKEN: accessToken,
-  });
+    const subject = "Welcome to my app";
+    const message = `<h1>Hello ${name}</h1>
+    <h3>Welcome to our ecommerce app !</h3>
+    <p>Thanks for registering to our platform</p>`;
+    const email = sentEmail(email, subject, message);
+
+    res.status(201).json({
+      message: "User registered successfully",
+      data: newUser,
+      ACCESS_TOKEN: accessToken,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 const loginUser = async (req, res) => {
