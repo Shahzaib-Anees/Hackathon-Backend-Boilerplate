@@ -28,6 +28,19 @@ const loanSchema = new mongoose.Schema({
     paymentBreadDown: {
         type: Number,
     },
+    gurantor: [
+        {
+            name: {
+                type: String,
+                required: [true, "Gurantor Name is required"]
+            },
+            cnic: {
+                type: String,
+                required: [true, "Gurantor Cnic is required"]
+            },
+        }
+
+    ],
     remaining: {
         type: Number,
         required: [true, "Remaining Amount is required"]

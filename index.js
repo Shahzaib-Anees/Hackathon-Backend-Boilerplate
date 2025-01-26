@@ -5,6 +5,8 @@ import connectDB from "./src/db/index.js";
 import cookieParser from "cookie-parser";
 import authRoutes from "./src/routes/user.routes.js";
 import adminRoutes from "./src/routes/admin.routes.js"
+import categoryRoutes from "./src/routes/category.routes.js";
+import subCategoryRoutes from "./src/routes/subCategories.routes.js"
 dotenv.config();
 
 const app = express();
@@ -20,6 +22,8 @@ app.get("/", async (req, res) => {
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/category", categoryRoutes);
+app.use("/api/v1/subCategory", subCategoryRoutes);
 
 (async () => {
   try {
