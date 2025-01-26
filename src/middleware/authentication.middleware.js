@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
-import { userModel } from "../models/user.schema.js";
-import Constants from "../constant.js";
+import { userModel } from "../models/user.models.js";
 
 const authMiddleware = async (req, res, next) => {
   const token = req.headers.authorization || req.body.token;

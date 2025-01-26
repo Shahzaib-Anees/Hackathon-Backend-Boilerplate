@@ -4,15 +4,12 @@ import dotenv from "dotenv";
 import connectDB from "./src/db/index.js";
 import cookieParser from "cookie-parser";
 import authRoutes from "./src/routes/user.routes.js";
+import adminRoutes from "./src/routes/admin.routes.js"
 dotenv.config();
 
 const app = express();
 app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-    exposedHeaders: ["set-cookie"],
-  })
+  cors()
 );
 app.use(cookieParser());
 app.use(express.json());
@@ -22,6 +19,7 @@ app.get("/", async (req, res) => {
 });
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/admin", adminRoutes);
 
 (async () => {
   try {
